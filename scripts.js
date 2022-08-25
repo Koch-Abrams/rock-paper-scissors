@@ -1,9 +1,11 @@
-/* 
-Globale Variablen - Ich weiß nicht, ob diese besser innerhalb einer Funktion stehen sollten?
-*/
-
+const result = document.querySelector('.result');
+const h1 = document.createElement('h1');
+const h2 = document.createElement('h2');
+const h3 = document.createElement('h3');
+const buttons = document.querySelectorAll('button');
 let playerCount = 0;
 let computerCount = 0;
+
 
 /* Create randomized Computer Selection */
 
@@ -17,67 +19,77 @@ function computerPlay() {
     return computerChoice;
 };
 
-/* Take both Selections as Arguments and compares them. Prints out Winner and increases Counter of Winning Side */
+/* takes player and computerselecton, compares them, declares winner while adding a point to the counter */
 
-
- function playRound(playerSelection, computerSelection) {
-
-    
+ function determineWinner(playerSelection, computerSelection) {
     if (playerSelection === computerSelection) {
-         console.log("It's a draw") && console.log(playerSelection, computerSelection,) ;  
+        h2.textContent = 'Diesmal ist es unentschieden!';
+        result.appendChild(h2);
     } else if (playerSelection == "Rock" && computerSelection == "Paper") {
+        h2.textContent = 'You lose, Paper beats Rock!';
+        result.appendChild(h2);
         computerCount++;
-        return console.log("You lose, Paper beats Rock!");
     } else if (playerSelection == "Paper" && computerSelection == "Scissors") {
+        h2.textContent = 'You lose! Paper beats Scissors.';
+        result.appendChild(h2);
         computerCount++;
-        return console.log("You lose, Scissors beats Paper!")
     } else if (playerSelection == "Scissors" && computerSelection == "Rock") {
+        h2.textContent = 'You lose, Rock beats Scissors!';
+        result.appendChild(h2);
         computerCount++;
-        return console.log("You lose, Rock beats Scissors!")
     } else if (playerSelection == "Rock" && computerSelection == "Scissors") {
+        h2.textContent = 'You win, Rock beats Scissors!';
+        result.appendChild(h2);
         playerCount++;
-        return console.log("You win, Rock beats Scissors!")
     } else if (playerSelection == "Paper" && computerSelection == "Rock") {
+        h2.textContent = 'You win, Paper beats Rock!';
+        result.appendChild(h2);
         playerCount++;
-        return console.log("You win, Paper beats Rock!") 
     } else if (playerSelection == "Scissors" && computerSelection == "Paper") {
+        h2.textContent = 'You win, Scissors beats Paper!';
+        result.appendChild(h2);
         playerCount++;
-        return console.log("You win, Scissors beats Paper!") 
     }
  }
- 
 
+/* plays determineWinner function after user selects option. if one players playercount reaches 5, it declares winner */ 
 
+function playRound() {
 
-function game() {
+    let playerSelection = buttons.forEach((button) => {
+        button.addEventListener('click', event => {
+            if (event.target.id == "1" ) {
+                playerSelection = "Rock";
+                let computerSelection = computerPlay();
+                determineWinner(playerSelection, computerSelection);
+                console.log(playerSelection, computerSelection);
+            } 
+            else if (event.target.id == "2") {
+                playerSelection = "Paper";
+                let computerSelection = computerPlay();
+                determineWinner(playerSelection, computerSelection);
+                console.log(playerSelection, computerSelection);
+            }
+            else if (event.target.id == "3") {
+                playerSelection = "Scissors";
+                let computerSelection = computerPlay();
+                determineWinner(playerSelection, computerSelection);
+                console.log(playerSelection, computerSelection);
+            }
 
-    let computerSelection = computerPlay();  
-    let playerSelect = prompt();
-    const playerSelectLowerCase = playerSelect.toLowerCase()
-    const playerSelection = playerSelectLowerCase.charAt(0).toUpperCase() + playerSelectLowerCase.slice(1);
+        console.log(playerCount, computerCount);
+        h3.textContent = playerCount + " - " + computerCount;
+        result.appendChild(h3);
 
-    playRound(playerSelection, computerSelection);
-    console.log(playerSelection, computerSelection);
-    
+        if (playerCount == 5) {
+            h1.textContent = "Du hast gewonnen - Herzlichen Glückwunsch!"
+            result.appendChild(h1);
+        } else if (computerCount == 5) {
+            h1.textContent = "Der Computer hat gewonnen du pleb"
+            result.appendChild(h1);
+        }
+        });
+    });
 }
 
-
-
-for (let i = 1; i < 6; i++) {
-    console.log("Round " + i + " - Fight!");
-    game();
-    
-    console.log(playerCount, computerCount);
-    console.log("-------------------------");
-    
-    if (i == 5 && playerCount > computerCount) {
-        console.log("Du hast gewonnen!");
-    } else if (i == 5 && playerCount < computerCount) {
-        console.log("Du hast verloren!");
-    } else if (i == 5 && playerCount == computerCount) {
-        console.log("Unentschieden.");
-    }
- }
- 
-
-
+playRound();
